@@ -15,13 +15,14 @@ public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase appDatabase = null;
 
-    public synchronized AppDatabase getInStance(Context context) {
+    public synchronized static AppDatabase getInStance(Context context) {
         if (appDatabase == null) {
             appDatabase = Room.databaseBuilder(
                     context,
                     AppDatabase.class,
-                    "DatabaseFood"
-            ).build();
+                    "DatabaseFood.sql"
+            )
+                    .build();
         }
         return appDatabase;
     }

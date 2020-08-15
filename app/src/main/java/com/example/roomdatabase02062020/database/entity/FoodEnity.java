@@ -6,7 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(indices = {@Index(value = {"en"}, unique = true)})
+@Entity(tableName = "food" ,indices = {@Index(value = {"en"}, unique = true)})
 public class FoodEnity {
     @PrimaryKey(autoGenerate = true)
     private Long id;
@@ -35,6 +35,9 @@ public class FoodEnity {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getEn() {
         return en;
