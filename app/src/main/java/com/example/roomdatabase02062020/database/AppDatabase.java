@@ -1,4 +1,28 @@
 package com.example.roomdatabase02062020.database;
 
-public class AppDatabase {
+import android.content.Context;
+
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+
+import com.example.roomdatabase02062020.database.entity.FoodEnity;
+
+
+@Database(entities = FoodEnity.class, version = 1)
+public abstract class AppDatabase extends RoomDatabase {
+    public abstract FoodDao foodDao();
+
+    private static AppDatabase appDatabase = null;
+
+    public synchronized AppDatabase getInStance(Context context) {
+        if (appDatabase == null) {
+            appDatabase = Room.databaseBuilder(
+                    context,
+                    AppDatabase.class,
+                    "DatabaseFood"
+            ).build();
+        }
+        return appDatabase;
+    }
 }
