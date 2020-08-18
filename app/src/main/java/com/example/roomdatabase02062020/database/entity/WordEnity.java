@@ -21,8 +21,7 @@ public class WordEnity {
     private Integer ismemorized;
 
     @Ignore
-    public WordEnity(Long id, String en, String vn, Integer ismemorized) {
-        this.id = id;
+    public WordEnity(String en, String vn, Integer ismemorized) {
         this.en = en;
         this.vn = vn;
         this.ismemorized = ismemorized;

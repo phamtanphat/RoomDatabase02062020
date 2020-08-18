@@ -8,6 +8,8 @@ import com.example.roomdatabase02062020.database.entity.WordEnity;
 
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 
 public class WordRepository {
@@ -26,5 +28,8 @@ public class WordRepository {
 
     public Observable<List<WordEnity>> getAllWords(){
         return mWordDao.getAllWords();
+    }
+    public Maybe<Long> saveWords(WordEnity wordEnity){
+        return mWordDao.saveWord(wordEnity);
     }
 }
