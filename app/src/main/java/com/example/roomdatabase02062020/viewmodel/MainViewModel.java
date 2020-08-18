@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.example.roomdatabase02062020.database.entity.WordEnity;
+import com.example.roomdatabase02062020.model.entity.WordEnity;
 import com.example.roomdatabase02062020.repository.WordRepository;
 
 import java.util.List;

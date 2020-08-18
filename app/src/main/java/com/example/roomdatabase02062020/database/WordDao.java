@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.example.roomdatabase02062020.database.entity.WordEnity;
+import com.example.roomdatabase02062020.model.entity.WordEnity;
 
 import java.util.List;
 

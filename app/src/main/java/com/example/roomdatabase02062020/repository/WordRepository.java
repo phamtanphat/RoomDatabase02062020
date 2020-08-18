@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.roomdatabase02062020.database.AppDatabase;
 import com.example.roomdatabase02062020.database.WordDao;
-import com.example.roomdatabase02062020.database.entity.WordEnity;
+import com.example.roomdatabase02062020.model.entity.WordEnity;
 
 import java.util.List;
 
