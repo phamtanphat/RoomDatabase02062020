@@ -6,8 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "food" ,indices = {@Index(value = {"en"}, unique = true)})
-public class FoodEnity {
+@Entity(tableName = "word" ,indices = {@Index(value = {"en"}, unique = true)})
+public class WordEnity {
     @PrimaryKey(autoGenerate = true)
     private Long id;
 
@@ -21,14 +21,14 @@ public class FoodEnity {
     private Integer ismemorized;
 
     @Ignore
-    public FoodEnity(Long id, String en, String vn, Integer ismemorized) {
+    public WordEnity(Long id, String en, String vn, Integer ismemorized) {
         this.id = id;
         this.en = en;
         this.vn = vn;
         this.ismemorized = ismemorized;
     }
 
-    public FoodEnity() {
+    public WordEnity() {
     }
 
     public Long getId() {

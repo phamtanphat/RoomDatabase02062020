@@ -6,12 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.roomdatabase02062020.database.entity.FoodEnity;
+import com.example.roomdatabase02062020.database.entity.WordEnity;
 
 
-@Database(entities = FoodEnity.class, version = 1)
+@Database(entities = WordEnity.class, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract FoodDao foodDao();
+    public abstract WordDao foodDao();
 
     private static AppDatabase appDatabase = null;
 
@@ -20,7 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
             appDatabase = Room.databaseBuilder(
                     context,
                     AppDatabase.class,
-                    "DatabaseFood.sql"
+                    "DatabaseWord.sql"
             )
                     .build();
         }
