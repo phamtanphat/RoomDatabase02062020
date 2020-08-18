@@ -1,8 +1,8 @@
 package com.example.roomdatabase02062020.view;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -10,6 +10,9 @@ import androidx.lifecycle.Observer;
 import com.example.roomdatabase02062020.R;
 import com.example.roomdatabase02062020.database.entity.WordEnity;
 import com.example.roomdatabase02062020.viewmodel.MainViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,15 +26,19 @@ public class MainActivity extends AppCompatActivity {
 
         // observer
 
-        mainViewModel.getWords().observe(this, foodEnities -> {
-            Toast.makeText(MainActivity.this, foodEnities.size() + "", Toast.LENGTH_SHORT).show();
+        // data words
+        mainViewModel.getWords().observe(this, wordEnities  -> {
+            Log.d("BBB",wordEnities.toString());
         });
-        mainViewModel.getInsertRowId().observe(this, new Observer<Long>() {
-            @Override
-            public void onChanged(Long aLong) {
-                Toast.makeText(MainActivity.this, aLong + "", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        // data id insert
+//        mainViewModel.getInsertRowId().observe(this, new Observer<Long>() {
+//            @Override
+//            public void onChanged(Long aLong) {
+//                Toast.makeText(MainActivity.this, aLong + "", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//         data errors
         mainViewModel.getError().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
@@ -40,8 +47,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // event
+        //select all
         mainViewModel.callDataWords();
-        mainViewModel.saveWord(new WordEnity("One","Mot",0));
-
+        //insert
+//        mainViewModel.saveWord(new WordEnity("Three","Ba",0));
+        //update
+//        mainViewModel.updateWord(wordEnities.get(0));
+        // delete
+//        mainViewModel.deleteWord(mArrayWords.get(0));
       }
 }

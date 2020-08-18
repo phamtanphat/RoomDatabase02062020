@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "word" ,indices = {@Index(value = {"en"}, unique = true)})
 public class WordEnity {
+
     @PrimaryKey(autoGenerate = true)
     private Long id;
 
@@ -60,5 +61,15 @@ public class WordEnity {
 
     public void setIsmemorized(Integer ismemorized) {
         this.ismemorized = ismemorized;
+    }
+
+    @Override
+    public String toString() {
+        return "WordEnity{" +
+                "id=" + id +
+                ", en='" + en + '\'' +
+                ", vn='" + vn + '\'' +
+                ", ismemorized=" + ismemorized +
+                '}';
     }
 }

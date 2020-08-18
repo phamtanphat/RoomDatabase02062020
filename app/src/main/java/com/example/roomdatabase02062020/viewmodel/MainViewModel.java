@@ -2,7 +2,6 @@ package com.example.roomdatabase02062020.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -80,7 +79,7 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
 
     public void saveWord(WordEnity wordEnity){
         mWordRepository
-                .saveWords(wordEnity)
+                .saveWord(wordEnity)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new MaybeObserver<Long>() {
@@ -112,6 +111,71 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
     }
     public LiveData<Long> getInsertRowId(){
         return mRowId;
+    }
+
+    public void updateWord(WordEnity wordEnity){
+        mWordRepository
+                .updateWord(wordEnity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MaybeObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Integer integer) {
+                        if (integer == -1){
+                            mError.setValue("Cập nhật thất bại");
+                        } else {
+                            mRowId.setValue(Long.valueOf(integer.toString()));
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mError.setValue(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+    public void deleteWord(WordEnity wordEnity){
+        mWordRepository
+                .deleteWord(wordEnity)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MaybeObserver<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(Integer integer) {
+                        if (integer == -1){
+                            mError.setValue("Cập nhật thất bại");
+                        } else {
+                            mRowId.setValue(Long.valueOf(integer.toString()));
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mError.setValue(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
