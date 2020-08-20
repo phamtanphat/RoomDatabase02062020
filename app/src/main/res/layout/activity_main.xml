@@ -23,7 +23,7 @@
                 android:elevation="10dp"
                 android:background="@color/color_gray_01"
                 android:layout_width="match_parent"
-                android:layout_height="220dp">
+                android:layout_height="210dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
