@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">RoomDatabase02062020</string>
+    <string name="hint_text_english">English</string>
+    <string name="hint_text_Vn">Vietnamese</string>
+    <string name="text_button_add_word">Add Word</string>
+    <string name="text_button_cancel">Cancel</string>
 </resources>

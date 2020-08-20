@@ -14,8 +14,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mainViewModel = new MainViewModel(this);
-        getLifecycle().addObserver(mainViewModel);
+
+        init();
+        mapView();
+        observer();
+        event();
 
         // observer
 
@@ -49,4 +52,16 @@ public class MainActivity extends AppCompatActivity {
         // delete
 //        mainViewModel.deleteWord(mArrayWords.get(0));
       }
+
+    private void init() {
+        mainViewModel = new MainViewModel(this);
+        getLifecycle().addObserver(mainViewModel);
+
+    }
+    private void mapView() {
+    }
+    private void observer() {
+    }
+    private void event() {
+    }
 }

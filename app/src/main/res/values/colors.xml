@@ -3,4 +3,18 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+<!--    white-->
+    <color name="color_white_01">#FFFFFF</color>
+<!--    gray-->
+    <color name="color_gray_01">#535252</color>
+
+
+<!--    green-->
+    <color name="color_green_01">#218838</color>
+    <color name="color_green_02">#124C1F</color>
+
+<!--    red-->
+    <color name="color_red_01">#C82333</color>
+    <color name="color_red_02">#7C1821</color>
 </resources>

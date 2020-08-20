@@ -33,8 +33,8 @@ public class MainViewModel extends ViewModel implements LifecycleObserver {
         mError = new MutableLiveData<>();
         mWordRepository = WordRepository.getInstance(context);
     }
-
-
+//
+//
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void init(){
         if (mArrayWords == null){
