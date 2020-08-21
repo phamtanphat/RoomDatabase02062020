@@ -7,8 +7,8 @@
 <!--    white-->
     <color name="color_white_01">#FFFFFF</color>
 <!--    gray-->
-    <color name="color_gray_01">#535252</color>
-    <color name="color_gray_02">#2C3E50</color>
+    <color name="color_gray_01">#F0F0F0</color>
+    <color name="color_gray_02">#682C3E50</color>
 
 
 <!--    green-->
@@ -18,4 +18,8 @@
 <!--    red-->
     <color name="color_red_01">#C82333</color>
     <color name="color_red_02">#7C1821</color>
+
+<!--    yellow-->
+    <color name="color_yellow_01">#E0A800</color>
+    <color name="color_yellow_02">#9A7403</color>
 </resources>

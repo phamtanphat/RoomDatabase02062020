@@ -4,4 +4,8 @@
     <string name="hint_text_Vn">Vietnamese</string>
     <string name="text_button_add_word">Add Word</string>
     <string name="text_button_cancel">Cancel</string>
+    <string name="text_forgot">Forgot</string>
+    <string name="text_remove">Remove</string>
+    <string name="text_vn_empty">----</string>
+    <string name="text_memorized">Memorized</string>
 </resources>

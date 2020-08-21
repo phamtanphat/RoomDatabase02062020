@@ -6,10 +6,9 @@
     android:gravity="center"
     android:background="@color/color_gray_02">
     <com.github.ybq.android.spinkit.SpinKitView
-
         android:id="@+id/spin_kit"
         style="@style/SpinKitView.FadingCircle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         app:SpinKit_Color="@color/color_white_01" />
 </LinearLayout>
