@@ -23,7 +23,7 @@
                 android:elevation="10dp"
                 app:cardBackgroundColor="@color/color_gray_01"
                 android:layout_width="match_parent"
-                android:layout_height="210dp">
+                android:layout_height="240dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -37,6 +37,8 @@
                         android:layout_height="wrap_content">
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
+                            android:maxLines="1"
+                            android:imeOptions="actionNext"
                             android:textSize="20sp"
                             android:id="@+id/textinputEn"
                             android:hint="@string/hint_text_english"
@@ -56,6 +58,8 @@
                         android:layout_height="wrap_content">
                         <com.google.android.material.textfield.TextInputEditText
                             android:textSize="20sp"
+                            android:imeOptions="actionDone"
+                            android:maxLines="1"
                             android:layout_width="match_parent"
                             android:id="@+id/textinputVn"
                             android:hint="@string/hint_text_Vn"

@@ -1,13 +1,16 @@
 package com.example.roomdatabase02062020.view;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -16,19 +19,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.roomdatabase02062020.R;
+import com.example.roomdatabase02062020.interfaces.OnItemRemoveListener;
 import com.example.roomdatabase02062020.interfaces.OnShouldShowForm;
 import com.example.roomdatabase02062020.model.entity.WordEnity;
 import com.example.roomdatabase02062020.view.adapter.WordAdapter;
 import com.example.roomdatabase02062020.viewmodel.MainViewModel;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnShouldShowForm {
-
-
     //View
     TextInputEditText mEdtEn,mEdtVn;
     Button mBtnCancel,mBtnAdd,mBtnOpen;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
     Spinner mSpinner;
     SwipeRefreshLayout mSwipeRefreshLayout;
     View mViewLoading;
+    TextInputLayout mTextInputLayoutEn,mTextInputLayoutVn;
 
     // Adapter
     WordAdapter mWordAdapter;
@@ -44,12 +48,16 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
 
     //Array
     List<String> mArrayFilter;
+    List<WordEnity> mArrayWords;
+    List<WordEnity> mArrayWordsFilter;
 
     //View model
     MainViewModel mainViewModel;
 
     //data
-    Boolean mRefreshed = false;
+    int mItemPosition = 0;
+    Boolean mLoading = false;
+    int mIdSelection = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,45 +68,15 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
         observer();
         event();
 
-        // observer
-
-
-        // data words
-//        mainViewModel.getWords().observe(this, wordEnities  -> {
-//            Log.d("BBB",wordEnities.toString());
-//        });
-
-        // data id insert
-//        mainViewModel.getInsertRowId().observe(this, new Observer<Long>() {
-//            @Override
-//            public void onChanged(Long aLong) {
-//                Toast.makeText(MainActivity.this, aLong + "", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//         data errors
-//        mainViewModel.getError().observe(this, new Observer<String>() {
-//            @Override
-//            public void onChanged(String s) {
-//                Log.d("BBB",s);
-//            }
-//        });
-
-        // event
-        //select all
-//        mainViewModel.callDataWords();
-        //insert
-//        mainViewModel.saveWord(new WordEnity("Three","Ba",0));
-        //update
-//        mainViewModel.updateWord(wordEnities.get(0));
-        // delete
-//        mainViewModel.deleteWord(mArrayWords.get(0));
       }
 
     private void init() {
         mainViewModel = new MainViewModel(this);
         getLifecycle().addObserver(mainViewModel);
         mArrayFilter = new ArrayList<>(Arrays.asList("Show All","Show Forgot","Show Memorized"));
-        mWordAdapter = new WordAdapter(new ArrayList<>());
+        mArrayWords = new ArrayList<>();
+        mArrayWordsFilter = new ArrayList<>();
+        mWordAdapter = new WordAdapter(mArrayWords);
         mSpinnerAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_dropdown_item, mArrayFilter);
 
     }
@@ -113,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
         mSpinner = findViewById(R.id.spinner);
         mSwipeRefreshLayout = findViewById(R.id.swipeRefresh);
         mViewLoading = findViewById(R.id.loadingView);
+        mTextInputLayoutEn = findViewById(R.id.textinputlayoutEn);
+        mTextInputLayoutVn = findViewById(R.id.textinputlayoutVn);
 
         mSpinner.setAdapter(mSpinnerAdapter);
         mRcvWord.setAdapter(mWordAdapter);
@@ -121,29 +101,124 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
     }
     private void observer() {
         mainViewModel.getWords().observe(this, wordEniTies  -> {
+            if (mArrayWords.size() > 0){
+                mArrayWords.clear();
+            }
+            mArrayWords.addAll(wordEniTies);
             mWordAdapter.setAllWord(wordEniTies);
         });
         mainViewModel.getLoading().observe(this, aBoolean -> {
+            mLoading = aBoolean;
             if (aBoolean){
                 mViewLoading.setVisibility(View.VISIBLE);
                 setEnableTouchScreen(false);
             }else {
                 mViewLoading.setVisibility(View.GONE);
                 setEnableTouchScreen(true);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
-            mRefreshed = aBoolean;
-            mSwipeRefreshLayout.setRefreshing(mRefreshed);
+        });
+        mainViewModel.getError().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
+        mainViewModel.getResultInsert().observe(this, aBoolean -> {
+            if (aBoolean){
+                mEdtEn.setText("");
+                mEdtVn.setText("");
+                Toast.makeText(MainActivity.this, "Thêm dữ liệu thành công", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mainViewModel.getResultUpdate().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean){
+                    mWordAdapter.notifyItemChanged(mItemPosition);
+                    Toast.makeText(MainActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        mainViewModel.getResultDelete().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean && mWordAdapter.getData().size() > 0){
+                    mWordAdapter.getData().remove(mItemPosition);
+                    mWordAdapter.notifyItemRemoved(mItemPosition);
+                    Toast.makeText(MainActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
     private void event() {
         mBtnOpen.setOnClickListener(view -> toggleForm(true));
         mBtnCancel.setOnClickListener(view -> toggleForm(false));
 
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mIdSelection = i;
+                mArrayWordsFilter.clear();
+                if (mArrayWords.size() > 0){
+                    for (int j = 0; j < mArrayWords.size() ; j++) {
+                        if (i == 1 && mArrayWords.get(j).getIsmemorized() == 1){
+                            mArrayWordsFilter.add(mArrayWords.get(j));
+                        }else if (i == 2 && mArrayWords.get(j).getIsmemorized() == 0){
+                            mArrayWordsFilter.add(mArrayWords.get(j));
+                        }else if (i == 0 ){
+                            mArrayWordsFilter.add(mArrayWords.get(j));
+                        }
+                    }
+                    mWordAdapter.setAllWord(mArrayWordsFilter);
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         // refresh
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mainViewModel.callDataWords();
+                mSpinner.setSelection(0,false);
+
+            }
+        });
+        mBtnAdd.setOnClickListener(view -> {
+            hideSoftKeyboard(mEdtVn);
+            hideSoftKeyboard(mEdtEn);
+            String en = mEdtEn.getText().toString();
+            String vn = mEdtVn.getText().toString();
+
+            if (en.length() > 0 && vn.length() > 0){
+                if (!en.matches(".*\\d.*") && !vn.matches(".*\\d.*")){
+                    setEnableErrorTextInputLayout(false);
+                    mainViewModel.saveWord(new WordEnity(en,vn,0));
+                }else{
+                    setEnableErrorTextInputLayout(true);
+                    mTextInputLayoutEn.setError("Không chứa giá trị là số");
+                    mTextInputLayoutVn.setError("Không chứa giá trị là số");
+                }
+            }else{
+                Toast.makeText(MainActivity.this, "Bạn chưa nhập đủ thông tin", Toast.LENGTH_SHORT).show();
+            }
+        });
+        mWordAdapter.setOnToggleWord(position -> {
+            mItemPosition = position;
+            mWordAdapter.getData().get(position).setIsmemorized(mWordAdapter.getData().get(position).getIsmemorized() == 0 ? 1 : 0);
+            mainViewModel.updateWord( mWordAdapter.getData().get(position));
+        });
+        mWordAdapter.setOnRemoveWord(new OnItemRemoveListener() {
+            @Override
+            public void setOnRemove(int position) {
+                mItemPosition = position;
+                mainViewModel.deleteWord( mWordAdapter.getData().get(position));
             }
         });
         mainViewModel.callDataWords();
@@ -170,5 +245,18 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
+    }
+    public void setEnableErrorTextInputLayout(boolean isShowError){
+        if (!isShowError){
+            mTextInputLayoutEn.setErrorEnabled(false);
+            mTextInputLayoutEn.setErrorEnabled(false);
+        }else{
+            mTextInputLayoutEn.setErrorEnabled(true);
+            mTextInputLayoutEn.setErrorEnabled(true);
+        }
+    }
+    private void hideSoftKeyboard(EditText input) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(input.getWindowToken(), 0);
     }
 }
