@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
     //data
     int mItemPosition = 0;
     Boolean mLoading = false;
-    int mIdSelection = 0;
+    int mIdSelection = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +137,23 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
                 if (aBoolean){
                     mWordAdapter.notifyItemChanged(mItemPosition);
                     Toast.makeText(MainActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                    if (mIdSelection == -1){
+                        mIdSelection = 0;
+                    }
+                    mArrayWordsFilter.clear();
+                    if (mArrayWords.size() > 0){
+                        for (int j = 0; j < mArrayWords.size() ; j++) {
+                            if (mIdSelection == 1 && mArrayWords.get(j).getIsmemorized() == 1){
+                                mArrayWordsFilter.add(mArrayWords.get(j));
+                            }else if (mIdSelection == 2 && mArrayWords.get(j).getIsmemorized() == 0){
+                                mArrayWordsFilter.add(mArrayWords.get(j));
+                            }else if (mIdSelection == 0 ){
+                                mArrayWordsFilter.add(mArrayWords.get(j));
+                            }
+                        }
+                        mWordAdapter.setAllWord(mArrayWordsFilter);
+                    }
+
                 }
             }
         });
@@ -213,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements OnShouldShowForm 
             mItemPosition = position;
             mWordAdapter.getData().get(position).setIsmemorized(mWordAdapter.getData().get(position).getIsmemorized() == 0 ? 1 : 0);
             mainViewModel.updateWord( mWordAdapter.getData().get(position));
+
         });
         mWordAdapter.setOnRemoveWord(new OnItemRemoveListener() {
             @Override

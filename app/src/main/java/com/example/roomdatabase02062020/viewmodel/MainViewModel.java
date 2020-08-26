@@ -19,6 +19,7 @@ import io.reactivex.MaybeObserver;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends BaseViewModel {
@@ -56,14 +57,14 @@ public class MainViewModel extends BaseViewModel {
                 .getAllWords()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<WordEnity>>() {
+                .subscribe(new MaybeObserver<List<WordEnity>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(List<WordEnity> wordEnities) {
+                    public void onSuccess(List<WordEnity> wordEnities) {
                         mArrayWords.setValue(wordEnities);
                         new Handler().postDelayed(() -> setLoading(false), 2000);
                     }

@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 public interface WordDao {
 
     @Query("SELECT * FROM word ")
-    Observable<List<WordEnity>> getAllWords();
+    Maybe<List<WordEnity>> getAllWords();
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     Maybe<Long> saveWord(WordEnity wordEnity);

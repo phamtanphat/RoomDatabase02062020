@@ -25,7 +25,7 @@ public class WordRepository {
         return mWordRepository;
     }
 
-    public Observable<List<WordEnity>> getAllWords(){
+    public Maybe<List<WordEnity>> getAllWords(){
         return mWordDao.getAllWords();
     }
     public Maybe<Long> saveWord(WordEnity wordEnity){
